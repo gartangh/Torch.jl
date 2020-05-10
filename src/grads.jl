@@ -9,10 +9,10 @@ end
 const ∇conv_bias = cudnn_convolution_backward_bias
 
 function ∇conv_data(dy::Tensor{T}, w::Tensor{T},
-                    cdims::DenseConvDims{M,K,C_in,C_out,S,P,D,F};
+                    cdims::ConvDims{M,K,C_in,C_out,S,P,D,F,G};
                     groups = 1,
                     benchmark = 0,
-                    deterministic = 0) where {M,K,C_in,C_out,S,P,D,F, T}
+                    deterministic = 0) where {M,K,C_in,C_out,S,P,D,F,G, T}
 
   ptr = Ref(Ptr{Cvoid}())
   padding          = [P[1];P[3]]
@@ -34,10 +34,10 @@ function ∇conv_data(dy::Tensor{T}, w::Tensor{T},
 end
 
 function ∇conv_filter(w::Tensor{T}, dy::Tensor{T},
-                      cdims::DenseConvDims{M,K,C_in,C_out,S,P,D,F};
+                      cdims::ConvDims{M,K,C_in,C_out,S,P,D,F,G};
                       groups = 1,
                       benchmark = 0,
-                      deterministic = 0) where {M,K,C_in,C_out,S,P,D,F, T}
+                      deterministic = 0) where {M,K,C_in,C_out,S,P,D,F,G, T}
 
   ptr = Ref(Ptr{Cvoid}())
   padding          = [P[1];P[3]]

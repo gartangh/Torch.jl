@@ -10,7 +10,7 @@ end
 macro runtime_error_check(ex)
   quote
     x = $ex
-    @show x
+    # @show x
     if x == 1
       cs = get_error()
       flush_error()

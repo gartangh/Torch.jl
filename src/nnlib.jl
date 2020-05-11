@@ -1,20 +1,14 @@
 using NNlib
-using NNlib: expand
 using NNlib: PoolDims
+using NNlib: ConvDims
 
-import NNlib: conv
-
-function NNlib.conv(x::Tensor{xT, N}, w::Tensor{T,N}, b::Tensor{T}, cdims::ConvDims{M,K,C_in,C_out,S,P,D,F,G};
-                    stride = 1, pad = 0, dilation = 1) where {T,N, xT,  M,K,C_in,C_out,S,P,D,F,G}
-
-  op = conv2d(x, w, b, stride = collect(S), padding = [P[1];P[3]], dilation = collect(dilation))
-  op
+function NNlib.conv(x::Tensor{xT, N}, w::Tensor{T,N}, b::Tensor{T}, cdims::ConvDims{M,K,C_in,C_out,S,P,D,F,G}) where {xT,N,T, M,K,C_in,C_out,S,P,D,F,G}
+  conv2d(x, w, b, stride = collect(S), padding = [P[1];P[3]], dilation = collect(D), groups = G)
 end
 
-function NNlib.conv(x::Tensor, w::Tensor, cdims::ConvDims; stride = 1, pad = 0, dilation = 1)
+function NNlib.conv(x::Tensor, w::Tensor, cdims::ConvDims)
   b = zeros(Tensor{Float32}, size(w)[end], dev = on(w))
-  op = conv(x, w, b, cdims, stride = stride, pad = pad, dilation = dilation)
-  op
+  conv(x, w, b, cdims)
 end
 
 function NNlib.relu(t::Tensor{T,N}) where {T,N}
